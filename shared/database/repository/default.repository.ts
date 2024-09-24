@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { IRepository } from 'shared/types/repository.interface';
 
 @Injectable()
-export abstract class BaseRepository<T> implements IRepository<T> {
+export abstract class DefaultRepository<T> implements IRepository<T> {
   constructor(protected readonly repository: Repository<T>) {}
 
   async findAll(): Promise<T[]> {
