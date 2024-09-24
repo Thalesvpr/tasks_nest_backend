@@ -1,7 +1,10 @@
 import { DefaultEntity } from "shared/database/entities/default.entity";
 import { Task } from "src/task/entities/task.entity";
-import { Column, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 
+
+
+@Entity()
 export class User extends DefaultEntity<User> {
 
     constructor(data?: Partial<User>) {

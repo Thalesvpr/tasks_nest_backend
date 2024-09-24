@@ -1,7 +1,9 @@
 import { DefaultEntity } from "shared/database/entities/default.entity";
 import { User } from "src/user/entities/user.entity";
-import { Column, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 
+
+@Entity()
 export class Task extends DefaultEntity<Task> {
 
     @Column()
@@ -12,7 +14,6 @@ export class Task extends DefaultEntity<Task> {
 
     @Column()
     status: string;
-
 
     @ManyToOne(() => User, (user) => user.tasks)
     user: User;
