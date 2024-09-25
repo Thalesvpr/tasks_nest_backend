@@ -1,12 +1,22 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
+import { join } from 'path';
 
 config();
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  entities: ['src/**/entities/*.entity{.ts,.js}'],
-  migrations: ['migrations/*{.ts,.js}'],
+  // Usando __dirname para definir os caminhos das entidades e migrações
+  entities: [
+    process.env.NODE_ENV === 'production'
+      ? join(__dirname, '/**/entities/*.entity.js')
+      : join(__dirname, '/**/entities/*.entity.ts')
+  ],
+  migrations: [
+    process.env.NODE_ENV === 'production'
+      ? join(__dirname, '/migrations/*.js')
+      : join(__dirname, '/migrations/*.ts')
+  ],
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT, 10),
   username: process.env.DB_USERNAME,
