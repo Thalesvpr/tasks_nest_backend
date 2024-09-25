@@ -1,6 +1,5 @@
-// src/common/entities/default.entity.ts
 import { randomUUID } from 'crypto';
-import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, PrimaryColumn, BeforeInsert } from 'typeorm';
+import { CreateDateColumn, UpdateDateColumn, PrimaryColumn, BeforeInsert } from 'typeorm';
 
 export abstract class DefaultEntity<T> {
 
@@ -24,3 +23,7 @@ export abstract class DefaultEntity<T> {
     @UpdateDateColumn()
     updatedAt: Date;
 }
+
+
+
+export type NewEntity<T> = Omit<T, "id" | "createdAt" | "updatedAt">;
