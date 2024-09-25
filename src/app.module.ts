@@ -4,9 +4,8 @@ import { AppService } from './app.service';
 import { TaskModule } from './task/task.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { DatabaseModule } from 'shared/database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { GoalModule } from './goal/goal.module';
+import { DatabaseModule } from './shared/database/database.module';
 
 @Module({
   imports: [
@@ -15,7 +14,7 @@ import { GoalModule } from './goal/goal.module';
         isGlobal: true
       }
     ),
-    DatabaseModule, TaskModule, UserModule, AuthModule, GoalModule],
+    DatabaseModule, TaskModule, UserModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

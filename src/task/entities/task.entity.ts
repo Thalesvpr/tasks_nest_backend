@@ -1,10 +1,14 @@
-import { DefaultEntity } from "shared/database/entities/default.entity";
 import { User } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToOne } from "typeorm";
+import { DefaultEntity } from '../../shared/entities/default.entity';
 
 
 @Entity()
 export class Task extends DefaultEntity<Task> {
+
+    constructor(data?: Partial<Task>) {
+        super(data);
+    }
 
     @Column()
     title: string;

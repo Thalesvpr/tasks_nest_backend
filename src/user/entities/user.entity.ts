@@ -1,4 +1,4 @@
-import { DefaultEntity } from "shared/database/entities/default.entity";
+import { DefaultEntity } from "../../shared/entities/default.entity";
 import { Task } from "src/task/entities/task.entity";
 import { Column, Entity, OneToMany } from "typeorm";
 
