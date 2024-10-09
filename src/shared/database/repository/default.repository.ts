@@ -1,4 +1,4 @@
-import { ObjectLiteral, Repository, FindOneOptions, EntityTarget, DataSource, DeepPartial } from 'typeorm';
+import { ObjectLiteral, Repository, FindOneOptions, EntityTarget, DataSource, DeepPartial, DeleteResult } from 'typeorm';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { DefaultEntity } from '../../entities/default.entity';
 import { BadRequestRepositoryError, NotFoundRepositoryError } from '../../exceptions/repository.exceptions';
@@ -37,11 +37,11 @@ export abstract class DefaultRepository<T extends ObjectLiteral & DefaultEntity<
     return { ...existingEntity, ...entity };
   }
 
-  async deleteOne(id: string): Promise<void> {
+  async deleteOne(id: string): Promise<DeleteResult> {
     const result = await this.repository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundRepositoryError(`Entity with id ${id} not found`);
     }
-
+    return result
   }
 }
