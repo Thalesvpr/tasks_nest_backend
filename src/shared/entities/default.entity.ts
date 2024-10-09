@@ -24,6 +24,6 @@ export abstract class DefaultEntity<T> {
     updatedAt: Date;
 }
 
-
-
 export type NewEntity<T> = Omit<T, "id" | "createdAt" | "updatedAt">;
+
+export type UpdateEntity<T> = Partial<NewEntity<T>>
