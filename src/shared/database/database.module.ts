@@ -1,14 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigService, ConfigModule } from '@nestjs/config';
-import { dataSourceOptions } from 'src/data-source';
+import dataSource from 'src/data-source';
 
+@Global()
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true, // Torna o ConfigService disponível em todo o projeto
+    TypeOrmModule.forRootAsync({
+      useFactory: () => dataSource.options, // Não precisa do `await dataSource.initialize()`
     }),
-    TypeOrmModule.forRoot(dataSourceOptions)
   ],
+  exports: [TypeOrmModule],
 })
 export class DatabaseModule {}
