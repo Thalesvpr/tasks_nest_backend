@@ -1,58 +1,69 @@
 import { Injectable } from '@nestjs/common';
 import { TaskRepository } from './task.repository';
 import { Task } from './entities/task.entity';
-import { UpdateTaskDto } from './dto/update-task.dto';
-import { ServiceResult } from 'src/shared/results/service.result';
-import { NewEntity } from 'src/shared/entities/default.entity';
+import { NewEntity, UpdateEntity } from 'src/shared/entities/default.entity';
 import { NotFoundRepositoryError, BadRequestRepositoryError } from 'src/shared/exceptions/repository.exceptions';
 
 @Injectable()
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  async getAllTasks(): Promise<ServiceResult<Task[]>> {
+  async getAllTasks(): Promise<Task[]> {
     const allTasks = await this.taskRepository.selectAll();
     if (!allTasks || allTasks.length === 0) {
-      return ServiceResult.failure(new NotFoundRepositoryError('No tasks found'));
+      throw new NotFoundRepositoryError('No tasks found');
     }
-    return ServiceResult.success(allTasks);
+    return allTasks;
   }
 
-  async getTaskById(id: string): Promise<ServiceResult<Task>> {
+  async getTaskById(id: string): Promise<Task> {
     const task = await this.taskRepository.selectOne(id);
     if (!task) {
-      return ServiceResult.failure(new NotFoundRepositoryError('Task not found'));
+      throw new NotFoundRepositoryError('Task not found');
     }
-    return ServiceResult.success(task);
+    return task;
   }
 
-  async createTask(data: NewEntity<Task>): Promise<ServiceResult<Task>> {
+  async createTask(data: NewEntity<Task>, userId: string): Promise<Task> {
     const newTask = new Task(data);
     const task = await this.taskRepository.insertOne(newTask);
     if (!task) {
-      return ServiceResult.failure(new BadRequestRepositoryError('Error creating task'));
+      throw new BadRequestRepositoryError('Error creating task');
     }
-    return ServiceResult.success(task);
+    return task;
   }
 
-  async updateTask(id: string, updateTaskDto: UpdateTaskDto): Promise<ServiceResult<Task>> {
-    const updateResult = await this.taskRepository.updateOne(id, updateTaskDto);
+  async updateTask(id: string, data: UpdateEntity<Task>, userId: string): Promise<Task> {
+    const task = await this.taskRepository.selectOne(id)
+
+    if(task.user.id == userId){
+      throw new BadRequestRepositoryError('You cannot update a task that you did not create')
+    }
+
+    const updateResult = await this.taskRepository.updateOne(id, data);
     if (!updateResult) {
-      return ServiceResult.failure(new NotFoundRepositoryError('Task not found'));
+      throw new NotFoundRepositoryError('Task not found');
     }
-    return ServiceResult.success(updateResult);
+    return updateResult;
   }
 
-  async deleteTask(id: string): Promise<ServiceResult<void>> {
+  async deleteTask(id: string, userId: string): Promise<void> {
+    const task = await this.taskRepository.selectOne(id)
+
+    if(task.user.id == userId){
+      throw new BadRequestRepositoryError('You cannot delete a task that you did not create')
+    }
     const deleteResult = await this.taskRepository.deleteOne(id);
-    return ServiceResult.success(undefined); // Retorna sucesso sem dados
+    if (!deleteResult.affected) {
+      throw new NotFoundRepositoryError('Task not found');
+    }
   }
 
-  async getTasksByUserId(userId: string): Promise<ServiceResult<Task[]>> {
+  async getTasksByUserId(userId: string): Promise<Task[]> {
     const tasksByUser = await this.taskRepository.findByUserId(userId);
     if (!tasksByUser || tasksByUser.length === 0) {
-      return ServiceResult.failure(new NotFoundRepositoryError('No tasks found for this user'));
+      throw new NotFoundRepositoryError('No tasks found for this user');
     }
-    return ServiceResult.success(tasksByUser);
+    return tasksByUser;
   }
 }
