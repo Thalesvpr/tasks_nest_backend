@@ -2,10 +2,19 @@ import { IsString, IsNotEmpty, Matches } from 'class-validator';
 
 export class LoginPayloadDto {
 
+    /**
+     * O e-mail é necessário para efetuar o login. Deve ser um e-mail válido que tenha sido registrado previamente.
+     * @example usuario@exemplo.com
+     */
     @IsString()
     @IsNotEmpty({ message: 'O email não pode estar vazio.' })
     email: string;
 
+    /**
+     * A senha é obrigatória para o login e deve seguir requisitos mínimos de segurança, como comprimento e complexidade.
+     * Deve conter pelo menos 8 caracteres, com uma letra maiúscula, uma letra minúscula, um número e um caractere especial.
+     * @example 123@Abc!
+     */
     @IsString()
     @IsNotEmpty({ message: 'A senha não pode estar vazia.' })
     @Matches(
@@ -14,15 +23,23 @@ export class LoginPayloadDto {
     )
     password: string;
 }
-function createPasswordRegex(): RegExp {
-    // Requisitos da senha
-    const lowerCase = '(?=.*[a-z])'; // Pelo menos uma letra minúscula
-    const upperCase = '(?=.*[A-Z])'; // Pelo menos uma letra maiúscula
-    const digit = '(?=.*\\d)'; // Pelo menos um número
-    const specialChar = '(?=.*[!@#$%^&*()_+\\-={}|[\]:";\'<>?,./~`])'; // Pelo menos um caractere especial
-    const minLength = '[A-Za-z\\d!@#$%^&*()_+\\-={}|[\]:";\'<>?,./~`]{8,}'; // Pelo menos 8 caracteres no total
 
-    // Junta todos os requisitos
+/**
+ * Cria uma expressão regular para validar a complexidade da senha.
+ * Requisitos:
+ * - Pelo menos uma letra minúscula
+ * - Pelo menos uma letra maiúscula
+ * - Pelo menos um número
+ * - Pelo menos um caractere especial
+ * - Mínimo de 8 caracteres no total
+ */
+function createPasswordRegex(): RegExp {
+    const lowerCase = '(?=.*[a-z])';
+    const upperCase = '(?=.*[A-Z])';
+    const digit = '(?=.*\\d)';
+    const specialChar = '(?=.*[!@#$%^&*()_+\\-={}|[\\]:";\'<>?,./~`])';
+    const minLength = '[A-Za-z\\d!@#$%^&*()_+\\-={}|[\\]:";\'<>?,./~`]{8,}';
+
     const regex = `^${lowerCase}${upperCase}${digit}${specialChar}${minLength}$`;
     return new RegExp(regex);
 }

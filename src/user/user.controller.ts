@@ -5,9 +5,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { AccessGuard } from 'src/auth/guard/access.guard';
 import { CurrentUser } from 'src/shared/decorators/user.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(AccessGuard)
 @Controller('users')
+@ApiTags('users')
+
 export class UserController {
   constructor(private readonly userService: UserService) { }
 

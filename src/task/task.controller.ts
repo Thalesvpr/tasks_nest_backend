@@ -6,9 +6,11 @@ import { Task } from './entities/task.entity';
 import { AccessGuard } from 'src/auth/guard/access.guard';
 import { CurrentUser } from 'src/shared/decorators/user.decorator';
 import { User } from 'src/user/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(AccessGuard)
 @Controller('tasks')
+@ApiTags('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) { }
 

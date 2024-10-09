@@ -7,8 +7,10 @@ import { NewEntity } from 'src/shared/entities/default.entity';
 import { User } from 'src/user/entities/user.entity';
 import { SystemExceptionFilter } from 'src/shared/filters/exception.filter';
 import { CurrentUser } from 'src/shared/decorators/user.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
