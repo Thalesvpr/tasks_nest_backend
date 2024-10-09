@@ -2,15 +2,8 @@ import { DefaultEntity } from "../../shared/entities/default.entity";
 import { Task } from "src/task/entities/task.entity";
 import { Column, Entity, OneToMany } from "typeorm";
 
-
-
 @Entity()
 export class User extends DefaultEntity<User> {
-
-    constructor(data?: Partial<User>) {
-        super(data);
-    }
-
     @Column({ unique: true })
     email: string;
 
@@ -20,8 +13,6 @@ export class User extends DefaultEntity<User> {
     @Column()
     name: string;
 
-
     @OneToMany(() => Task, (task) => task.user)
     tasks: Task[];
-
 }
