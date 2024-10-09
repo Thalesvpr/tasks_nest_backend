@@ -9,8 +9,8 @@ export const dataSourceOptions: DataSourceOptions = {
   // Usando __dirname para definir os caminhos das entidades e migrações
   entities: [
     process.env.NODE_ENV === 'production'
-      ? join(__dirname, '/**/entities/*.entity.js')
-      : join(__dirname, '/**/entities/*.entity.ts')
+      ? join(__dirname, '/**/entities/*.entity.{ts,js}')
+      : join(__dirname, '/**/entities/*.entity.{ts,js}')
   ],
   migrations: [
     process.env.NODE_ENV === 'production'
